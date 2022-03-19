@@ -21,8 +21,7 @@ __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
 
-class Builder(Harvester):
-    ICON = '🏗️'
+class Settler(Harvester):
+    ICON = '🌾'
+    FILL_UP_BEFORE_LEAVING = False  # doesn't reset source :/
     #DEBUG = True
-
-    # TODO XXX: repairs, building walls

@@ -1,0 +1,1 @@
+Game.getObjectById('5fcd0df9b36067270d588e41').send(RESOURCE_ENERGY, 100000, "W25N3")

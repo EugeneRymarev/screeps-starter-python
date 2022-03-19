@@ -6,6 +6,8 @@ class RoomManagerRCL3(RoomManagerRCL2):
     def spawn_creeps(self):
         room = self.room
         spawn = get_first_spawn(room)
+        if not spawn:
+            return
         if not spawn.spawning:
             if room.energyCapacityAvailable < 800:  # extensions were not built yet
                 return RoomManagerRCL2(room).run()
@@ -23,11 +25,29 @@ class RoomManagerRCL3(RoomManagerRCL2):
                     parts.extend([MOVE]*8)
                     spawn.createCreep(parts, "", {memory: {cls: 'hauler'}})
                     return
-            if len(self.creep_registry[room]['upgrader']) < 2:  # TODO: ? 2
-                if room.energyAvailable >= 800:
-                    spawn.createCreep([WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE], "", {memory: {cls: 'upgrader'}})
-                    return
-            # total of 5, so 0.2*5 = 1.0 CPU/tick - decisions but even less bc miner will be idle half the time
+
+            if room.controller.level < 8:  # TODO: handle smaller too
+                if len(self.creep_registry[room]['upgrader']) < 2:  # TODO: ? 2
+                    if room.energyAvailable >= 800:
+                        spawn.createCreep([WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE], "", {memory: {cls: 'upgrader'}})
+                        return
+            else:
+                print('not spawning an upgrader because it was disabled')
+                return # TODO: temporary
+                # RCL8
+                if len(self.creep_registry[room]['upgrader']) < 1:
+                    if room.energyAvailable >= 100*15 +50*3 +50*5:
+
+                        spawn.createCreep(
+                            [
+                                WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK,
+                                CARRY, CARRY, CARRY,
+                                MOVE, MOVE, MOVE, MOVE, MOVE,
+                            ],
+                            "",
+                            {memory: {cls: 'upgrader'}},
+                        )
+                        return
 
     def run_build(self):
         return super().run_build()
