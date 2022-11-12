@@ -37,7 +37,8 @@ class AbstractRoomManager:
                 #return RoomManagerRCL1().spawn_creeps()
                 if self.room.energyAvailable >= 250:  # wait until source is full (there are no extensions)
                     spawn = get_first_spawn(self.room)
-                    spawn.createCreep([WORK, CARRY, MOVE, MOVE], "", {'cls': 'harvester'})
+                    if spawn:
+                        spawn.createCreep([WORK, CARRY, MOVE, MOVE], "", {'cls': 'harvester'})
 
         if self.room.name != 'sim':
             room_id = int(self.room.controller.id)
@@ -101,6 +102,8 @@ class AbstractRoomManager:
 
     def execute_transfer(self, source_links, target_links, used_set):
         for target_link in target_links:
+            if not target_link:
+                continue  # TODO: remove this hack which prevents stalls when a bad link structure is passed in somehow
             self.debug_log('target_link', target_link.id)
             if target_link.store.getFreeCapacity(RESOURCE_ENERGY) >= self.LINK_MIN_TRANSFER_AMOUNT:
                 self.debug_log('////////////////////////////', target_link.id, 'link needs link filled')

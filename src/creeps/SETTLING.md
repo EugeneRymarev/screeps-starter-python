@@ -18,3 +18,14 @@ Game.spawns["W27N1-2"].spawnCreep([WORK, WORK, WORK, WORK, WORK, MOVE, MOVE, MOV
 Game.spawns["W26N2-1"].spawnCreep([WORK, WORK, CARRY, MOVE], "super2", {"memory": {"cls": "harvester"}, "directions": [TOP]})
 
 Game.spawns["Spawn3"].spawnCreep([ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE], "cleanser1", {"memory": {"cls": "cleanser", "room": "W23N3"}})
+
+
+
+
+
+Game.spawns["W26N2-1"].spawnCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], "BOB-W27N2b", {"memory": {"room": "W27N2", "cls": "settler"}})
+
+Game.spawns["W25N3-2"].spawnCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], "BOB-W26N3b", {"memory": {"room": "W26N3", "cls": "settler"}})
+
+Game.spawns["W28N4-1"].spawnCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], "BOB-W27N3b", {"memory": {"room": "W27N3", "cls": "settler"}})
+

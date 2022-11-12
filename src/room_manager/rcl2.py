@@ -30,9 +30,11 @@ class RoomManagerRCL2(AbstractRoomManager):
         #    break
         spawn = get_first_spawn(room)
         print(',,, spawn_creeps() in', room.name)
-        if spawn is None or spawn == undefined:
+        if spawn is None or spawn == undefined or not spawn:  # TODO: check which one this really is
             return  # no spawn yet
         if spawn.spawning:
+            return
+        if spawn.progress != undefined:
             return
         if room.energyCapacityAvailable < 1300: # and len(Game.rooms) >= 2:
             print('skipping spawning in', room.name, 'because we are bootstrapped by other rooms')
