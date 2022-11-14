@@ -94,16 +94,16 @@ class Miner(AbstractCreep, Carry):
                                 ScheduledAction.harvest(creep, source)
                             )
                         # NOTE: this requires EasyCreep
-                        if creep.store[RESOURCE_ENERGY] > 32:  # TODO appropriate value
+                        if creep.store[RESOURCE_ENERGY] >= creep.store.getCapacity(RESOURCE_ENERGY) * 0.9:  # TODO even more appropriate value?
                             repair = self._get_nearby_repair_action()
                             if len(repair) and Game.time % 10 == 0:
                                 a = ScheduledAction.repair(creep, repair)
                                 a.priority = 20
                                 actions.append(a)
-                            else:
-                                build = self._get_nearby_build_action()
-                                if build:
-                                    actions.append(ScheduledAction.build(creep, build, priority=20))
+                            #else:
+                            #    build = self._get_nearby_build_action()
+                            #    if build:
+                            #        actions.append(ScheduledAction.build(creep, build, priority=20))
                             if creep.room.controller.pos.inRangeTo(creep.pos.x, creep.pos.y, 3):
                                 to_construct = [s.progressTotal - s.progress for s in room.find(FIND_CONSTRUCTION_SITES)]
                                 if to_construct == 0:

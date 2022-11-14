@@ -36,7 +36,7 @@ class Cleanser(AbstractCreep):
         actions = []
 
         heals = part_count(creep, 'heal')
-        if heals >= 1 and creep.hitsMax > creep.hits:
+        if heals >= 1 and creep.hits < creep.hitsMax:
             actions.append(
                 ScheduledAction.heal(creep, creep, priority=1001)
             )
@@ -45,8 +45,8 @@ class Cleanser(AbstractCreep):
         return actions
 
     def _handle_target_roster(self):
-        for type_, filter in self.TARGET_ROSTER:
-            target = creep.pos.findClosestByRange(type_, filter=filter)
+        for type_, filterr in self.TARGET_ROSTER:
+            target = creep.pos.findClosestByRange(type_, filter=filterr)
             if target != undefined:
                 if not creep.pos.isNearTo(target):
                     return [ScheduledAction.moveTo(creep, target, priority=20)]
