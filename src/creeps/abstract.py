@@ -166,6 +166,12 @@ class AbstractCreep:
         builds = creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 3)
         if not including_walls:
             builds = [b for b in builds if b.structureType != STRUCTURE_WALL]
+        for str_type in [STRUCTURE_LINK, STRUCTURE_CONTAINER, STRUCTURE_SPAWN]:
+            high_priority = [b for b in builds if b.structureType == str_type]
+            if len(high_priority) >= 1:
+                print('HIGH PRIORITY BUILD DETECTED', creep, high_priority[0])
+                builds = high_priority
+                break
         if len(builds) >= 1:
             tgt = _.min(builds, lambda s: s.progressTotal - s.progress)
             return tgt
