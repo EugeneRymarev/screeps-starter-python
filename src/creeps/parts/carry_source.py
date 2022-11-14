@@ -128,6 +128,10 @@ class CarrySource:
         )
         return creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, filter=source_filter)
 
+    @classmethod
+    def _get_mineral(cls, creep):
+        return creep.pos.findClosestByRange(FIND_MINERALS)
+
     def get_source(self):
         source = self._get_cached_source(self.creep)
         if source:

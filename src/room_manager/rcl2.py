@@ -127,6 +127,7 @@ class RoomManagerRCL2(AbstractRoomManager):
             if to_fortify > (fortify_hp/10):
                 to_construct_sum = 1000  # fortify slowly
         builders = self.creep_registry.count_of_type(room, 'builder')
+        extractors = self.creep_registry.count_of_type(room, 'extractor')
         miners = self.creep_registry.count_of_type(room, 'miner')
         haulers = self.creep_registry.count_of_type(room, 'hauler')
         dropped_sum = sum([r.amount for r in room.find(FIND_DROPPED_RESOURCES)])
@@ -137,6 +138,7 @@ class RoomManagerRCL2(AbstractRoomManager):
         sources = search_room(room, FIND_SOURCES)
         desired_haulers = max(1, int(size / 7))  # TODO: can use less larger ones
 
+        desired_extractors = 0
         if room.controller.level == 4 and room.energyCapacityAvailable >= 1300:
             desired_haulers = desired_haulers / 2
         elif room.controller.level == 5:    # TODO: actually we should see if links are up and if we have miners with CARRY
@@ -147,6 +149,8 @@ class RoomManagerRCL2(AbstractRoomManager):
             else:
                 print('WARING: weird number of sources in a plannable room?')
         elif room.controller.level >= 6:
+            if room.name == 'W23N2':
+                desired_extractors = 1
             desired_haulers = 1  # with creeps fully optimized for CPU a single filler is not enough
             #if room.energyCapacityAvailable - room.energyAvailable >= 2401:
             #    desired_haulers = 2  # with creeps fully optimized for CPU just one filler is not enough
@@ -228,7 +232,8 @@ class RoomManagerRCL2(AbstractRoomManager):
                     ], "", {'cls': 'miner'})
                 elif room.energyAvailable >= 1800:
                     spawn.createCreep([
-                        WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK,
+                        WORK, WORK, WORK, WORK, WORK,
+                        WORK, WORK, WORK, WORK, WORK,
                         WORK, WORK, WORK, WORK, WORK,
                         CARRY, CARRY, CARRY,
                         MOVE, MOVE, MOVE
@@ -260,6 +265,37 @@ class RoomManagerRCL2(AbstractRoomManager):
                 spawn.createCreep(parts, "", {'cls': 'hauler'})
                 return
 
+        elif extractors < desired_extractors:
+            if room.energyAvailable >= 2400:
+                spawn.createCreep([
+                    WORK, WORK, WORK, WORK, WORK,
+                    WORK, WORK, WORK, WORK, WORK,
+                    WORK, WORK, WORK, WORK, WORK,
+                    WORK, WORK, WORK, WORK, WORK,
+                    CARRY, CARRY, CARRY, CARRY,
+                    MOVE, MOVE, MOVE, MOVE,  # TODO: could save 200*2/1500, 400 per creep life, if it didn't move
+                ], "", {'cls': 'extractor'})
+            elif room.energyAvailable >= 1800:
+                spawn.createCreep([
+                    WORK, WORK, WORK, WORK, WORK,
+                    WORK, WORK, WORK, WORK, WORK,
+                    WORK, WORK, WORK, WORK, WORK,
+                    CARRY, CARRY, CARRY,
+                    MOVE, MOVE, MOVE
+                ], "", {'cls': 'extractor'})
+            #elif room.energyAvailable >= 1200:
+            #    spawn.createCreep([
+            #        WORK, WORK, WORK, WORK, WORK,
+            #        WORK, WORK, WORK, WORK, WORK,
+            #        CARRY, CARRY,
+            #        MOVE, MOVE,
+            #    ], "", {'cls': 'extractor'})
+            #elif room.energyAvailable >= 600:
+            #    spawn.createCreep([
+            #        WORK, WORK, WORK, WORK, WORK,
+            #        CARRY,
+            #        MOVE,
+            #    ], "", {'cls': 'extractor'})
 
         if to_construct > 300:
             return
