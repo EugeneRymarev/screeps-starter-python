@@ -23,7 +23,7 @@ Game.spawns["Spawn3"].spawnCreep([ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK
 
 
 
-Game.spawns["W26N2-1"].spawnCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], "BOB-W27N2b", {"memory": {"room": "W27N2", "cls": "settler"}})
+Game.spawns["W26N2-1"].spawnCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], "BOB-W27N2a", {"memory": {"room": "W27N2", "cls": "settler"}})
 
 Game.spawns["W25N3-2"].spawnCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], "BOB-W26N3b", {"memory": {"room": "W26N3", "cls": "settler"}})
 

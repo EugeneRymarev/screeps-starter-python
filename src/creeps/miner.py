@@ -111,7 +111,7 @@ class Miner(AbstractCreep, Carry):
                     transfer_to_link = self._get_transfer_to_link_actions(creep, source)
                     if len(transfer_to_link) >= 1:
                         actions.extend(transfer_to_link)
-                    else:
+                    elif creep.store.getCapacity(RESOURCE_ENERGY) > 0 and creep.store.getFreeCapacity(RESOURCE_ENERGY) == 0:
                         util = self._get_neighboring_nonfull_util(creep)
                         if util:
                             a = make_transfer_action(creep, util)
