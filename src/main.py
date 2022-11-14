@@ -126,10 +126,10 @@ def main():
                 continue
             if s.hits <= s.hitsMax-1000:
                 for tower in towers:
+                    if tower.id in busy_tower_ids or tower.store[RESOURCE_ENERGY] < 10:
+                        continue
                     if s.hits <= 500:
                         print('WARNING: tower performing emergency repairs', room.name, s, s.id, s.hits, s.hitsMax, tower)
-                    if s.id in busy_tower_ids:
-                        continue
                     tower.repair(s)  # TODO: action with priority
                     busy_tower_ids.add(tower.id)
                     break
