@@ -54,6 +54,8 @@ class Harvester(EasyCreep):
         # TODO XXX: critical repairs?
         if not self.class_exists('builder') or self.creep.memory.cls == 'builder':
             result.append(self._get_closest_construction_site)
+        if self.creep.memory.cls == 'builder':
+            result.append(self._get_closest_fortification)
         #else:
         #    result.append(self._get_neighboring_construction_site)
         result.append(self._get_best_free_church)

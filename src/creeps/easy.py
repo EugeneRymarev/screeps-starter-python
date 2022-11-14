@@ -143,12 +143,20 @@ class EasyCreep(AbstractCreep, Carry, Work):
             action = ScheduledAction.build(creep, target)
             action.priority = 200
             return [action]
+
+        # store
         if target.store:
             actions = [ScheduledAction.transfer(creep, target, RESOURCE_ENERGY, on_error=reset_target)]
             #if target.store.getFreeCapacity(RESOURCE_ENERGY) >= self.energy(creep):
             #    #print(creep, 'gooooo2')  # TODO XXX: flaps near storage if room really needs refill
             #    actions.extend(self.do_fill(creep))
             return actions
+
+        # fortify
+        if target.structureType == STRUCTURE_RAMPART or target.structureType == STRUCTURE_WALL:
+            action = ScheduledAction.repair(creep, target, on_error=reset_target)
+            action.priority = 5
+            return [action]
         actions = []
         actions.append(ScheduledAction.moveTo(creep, target))
         #print('ERROR: not sure what', creep, 'should do with', target)

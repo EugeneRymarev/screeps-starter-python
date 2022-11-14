@@ -44,8 +44,14 @@ class RoomManagerRCL2(AbstractRoomManager):
 
         # XXX XXX XXX // big temp section \\
 
+        fortify_hp = 100000
         if controller_flag != undefined:
             print('we have a controller flag!')
+
+            new_fortify_hp = controller_flag.memory['fortify_hp']
+            if new_fortify_hp != undefined:
+                fortify_hp = int(new_fortify_hp)
+
             claim_target = controller_flag.memory['claim']
             if claim_target != undefined:
                 print('and a claim target!')
@@ -104,7 +110,22 @@ class RoomManagerRCL2(AbstractRoomManager):
         # XXX XXX XXX \\ big temp section //
 
         to_construct = [s.progressTotal - s.progress for s in room.find(FIND_CONSTRUCTION_SITES)]
+
+        rampart_filter = lambda s: (
+            s.structureType == STRUCTURE_RAMPART and s.hits < fortify_hp
+        )
+        ramparts_to_fortify = [max(0, fortify_hp - s.hits) for s in room.find(FIND_MY_STRUCTURES, {'filter': rampart_filter})]
+
+        wall_filter = lambda s: (
+            s.structureType == STRUCTURE_WALL and s.hits < fortify_hp
+        )
+        walls_to_fortify = [max(0, fortify_hp - s.hits) for s in room.find(FIND_STRUCTURES, {'filter': wall_filter})]
+
         to_construct_sum = sum(to_construct)
+        if to_construct_sum == 0:
+            to_fortify = sum(ramparts_to_fortify) + sum(walls_to_fortify)
+            if to_fortify > (fortify_hp/10):
+                to_construct_sum = 1000  # fortify slowly
         builders = self.creep_registry.count_of_type(room, 'builder')
         miners = self.creep_registry.count_of_type(room, 'miner')
         haulers = self.creep_registry.count_of_type(room, 'hauler')

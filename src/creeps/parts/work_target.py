@@ -30,6 +30,14 @@ link_filter = lambda s: (
     s.structureType == STRUCTURE_LINK
 )
 
+rampart_filter = lambda s: (
+    s.structureType == STRUCTURE_RAMPART and s.hits < 100000
+)
+
+wall_filter = lambda s: (
+    s.structureType == STRUCTURE_WALL and s.hits < 100000
+)
+
 non_full_link_filter = lambda s: (
     s.structureType == STRUCTURE_LINK and s.energy < s.energyCapacity
 )
@@ -39,6 +47,16 @@ class WorkTarget:
     @classmethod
     def _get_spawn_construction_site(cls, creep):
         return _(creep.room.find(FIND_CONSTRUCTION_SITES)).filter(spawn_filter).sample()
+
+    @classmethod
+    def _get_closest_fortification(cls, creep):
+        rampart = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {'filter': rampart_filter})
+        if rampart != undefined and rampart:
+            return rampart
+        wall = creep.pos.findClosestByRange(FIND_STRUCTURES, {'filter': wall_filter})
+        if wall != undefined and wall:
+            return wall
+        return None
 
     @classmethod
     def _get_closest_construction_site(cls, creep):
