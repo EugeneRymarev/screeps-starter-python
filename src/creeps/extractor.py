@@ -32,8 +32,7 @@ class Extractor(AbstractCreep, Carry):
         room = creep.room
         mineral = self._get_mineral(creep)
         actions = []
-        #if creep.store.getFreeCapacity(mineral.mineralType) == 0:
-        if True:
+        if creep.store.getFreeCapacity(mineral.mineralType) == 0:
             # time to stash it
             target = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, filter=stash_filter)
             if target == undefined:

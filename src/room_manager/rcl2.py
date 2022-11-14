@@ -44,7 +44,7 @@ class RoomManagerRCL2(AbstractRoomManager):
 
         # XXX XXX XXX // big temp section \\
 
-        fortify_hp = 100000
+        fortify_hp = 500000
         if controller_flag != undefined:
             print('we have a controller flag!')
 
@@ -122,6 +122,7 @@ class RoomManagerRCL2(AbstractRoomManager):
         walls_to_fortify = [max(0, fortify_hp - s.hits) for s in room.find(FIND_STRUCTURES, {'filter': wall_filter})]
 
         to_construct_sum = sum(to_construct)
+        to_fortify = 0
         if to_construct_sum == 0:
             to_fortify = sum(ramparts_to_fortify) + sum(walls_to_fortify)
             if to_fortify > (fortify_hp/10):
