@@ -150,8 +150,10 @@ class RoomManagerRCL2(AbstractRoomManager):
             else:
                 print('WARING: weird number of sources in a plannable room?')
         elif room.controller.level >= 6:
-            if room.name == 'W23N2':
-                desired_extractors = 1
+            if room.terminal != undefined:
+                mineral = room.terminal.pos.findClosestByRange(FIND_MINERALS)
+                if mineral.mineralAmount > 0:
+                    desired_extractors = 1
             desired_haulers = 1  # with creeps fully optimized for CPU a single filler is not enough
             #if room.energyCapacityAvailable - room.energyAvailable >= 2401:
             #    desired_haulers = 2  # with creeps fully optimized for CPU just one filler is not enough
