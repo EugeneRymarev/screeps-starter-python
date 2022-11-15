@@ -31,11 +31,11 @@ link_filter = lambda s: (
 )
 
 rampart_filter = lambda s: (
-    s.structureType == STRUCTURE_RAMPART and s.hits < 100000
+    s.structureType == STRUCTURE_RAMPART and s.hits < 1000000
 )
 
 wall_filter = lambda s: (
-    s.structureType == STRUCTURE_WALL and s.hits < 100000
+    s.structureType == STRUCTURE_WALL and s.hits < 1000000
 )
 
 non_full_link_filter = lambda s: (

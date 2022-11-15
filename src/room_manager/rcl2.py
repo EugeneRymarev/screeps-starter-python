@@ -44,7 +44,7 @@ class RoomManagerRCL2(AbstractRoomManager):
 
         # XXX XXX XXX // big temp section \\
 
-        fortify_hp = 500000
+        fortify_hp = 1000000
         if controller_flag != undefined:
             print('we have a controller flag!')
 
