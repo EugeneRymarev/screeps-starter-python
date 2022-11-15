@@ -92,6 +92,9 @@ class AbstractRoomManager:
             terminal = our_links.get_terminal()
             if terminal != undefined:
                 target_links.append(terminal)
+            storage = our_links.get_terminal()
+            if storage != undefined:
+                target_links.append(storage)
             target_links.append(controller_link)
         else:
             # sources and others feed controller
@@ -101,6 +104,9 @@ class AbstractRoomManager:
             terminal = our_links.get_terminal()
             if terminal != undefined:
                 source_links.extend(terminal)
+            storage = our_links.get_terminal()
+            if storage != undefined:
+                source_links.append(storage)
         #print('============================ running links in ' + self.room.name)  #, our_links)
         self.debug_log('============================ running links in', self.room.name, our_links)
         used_set = set()
