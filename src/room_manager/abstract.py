@@ -75,7 +75,7 @@ class AbstractRoomManager:
 
     def debug_log(self, *args):
         DEBUG_ROOMS = []
-        DEBUG_ROOMS = ['W26N2']
+        #DEBUG_ROOMS = ['W28N4']
         if DEBUG_ROOMS.includes(self.room.name):
             print(*args)
 
@@ -89,12 +89,18 @@ class AbstractRoomManager:
             # sources send to others, then controller
             source_links = our_links.get_sources()
             target_links.extend(our_links.get_others())
+            terminal = our_links.get_terminal()
+            if terminal != undefined:
+                target_links.append(terminal)
             target_links.append(controller_link)
         else:
             # sources and others feed controller
             target_links.append(controller_link)
             source_links = our_links.get_sources()
             source_links.extend(our_links.get_others())
+            terminal = our_links.get_terminal()
+            if terminal != undefined:
+                source_links.extend(terminal)
         #print('============================ running links in ' + self.room.name)  #, our_links)
         self.debug_log('============================ running links in', self.room.name, our_links)
         used_set = set()
