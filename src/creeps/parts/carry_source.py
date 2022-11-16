@@ -4,6 +4,9 @@ __pragma__('noalias', 'name')
 from creeps.scheduled_action import ScheduledAction
 
 
+extension_filter = lambda s: s.structureType == STRUCTURE_EXTENSION
+
+
 class CarrySource:
     @classmethod
     def _get_cached_source(cls, creep):
@@ -40,7 +43,12 @@ class CarrySource:
                 return False  # construction site
             if s.store[RESOURCE_ENERGY] < 50:
                 return False  # not enough energy
-            return True  # we don't care if it belongs to a miner or upgrader or whatever, just get it.
+
+            if s.structureType == STRUCTURE_LINK:
+                if len(s.pos.findInRange(FIND_MY_STRUCTURES, 2, filter=extension_filter)) == 0:
+                    # when refilling don't take from a link if it's not near an extensions
+                    return False
+            return True
         result = creep.pos.findClosestByRange(FIND_STRUCTURES, filter=source_filter)
         return result
 

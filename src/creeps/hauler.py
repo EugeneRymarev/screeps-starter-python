@@ -71,7 +71,6 @@ class Hauler(Harvester):
             #print('yeah', creep.name, fullest_miner_container.store[RESOURCE_ENERGY], fullest_miner_container.id)
             targets.append(cls._get_nonfull_terminal)
             targets.append(cls._get_nonfull_storage)
-            targets.append(cls._get_nonfull_storage)
         if creep.room.energyCapacity < 1300:
             targets.append(cls._get_nearby_construction_site)
             targets.append(cls._get_closest_construction_site)
@@ -92,7 +91,7 @@ class Hauler(Harvester):
         sources.append(self._get_neighboring_miner_container)
         sources.append(self._get_dropped_resource)
         sources.append(self._get_random_energetic_ruin)
-        if self.creep.room.controller.level <= 4:
+        if self.creep.room.controller.level <= 4:  # by level 4 everything the enemy has left should be drained already
             sources.append(self._get_closest_enemy_building)
         #if self.creep.room.controller.level <= 4:
         sources.append(self._get_fullest_miner_container)
