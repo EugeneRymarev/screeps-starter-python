@@ -26,7 +26,13 @@ class Extractor(AbstractCreep, Carry):
     def _should_mine(self, mineral):
         if mineral.ticksToRegeneration == undefined:
             return True  # new source
-        return mineral.mineralAmount > 0
+        elif mineral.mineralAmount == 0:
+            return False
+        found = creep.room.lookForAt(LOOK_STRUCTURES, mineral.pos)
+        for s in found:
+            if s.structureType == STRUCTURE_EXTRACTOR:
+                return s.cooldown == 0
+        return False
 
     def _run(self):
         super()._run()
