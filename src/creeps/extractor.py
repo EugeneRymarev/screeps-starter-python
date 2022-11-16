@@ -14,6 +14,8 @@ def stash_filter(s):
         return False  # not that type of a structure
     if not s.store:
         return False  # construction site
+    if s.store.getFreeCapacity(RESOURCE_KEANIUM) == 0:
+        return False
     return True  # we don't care if it belongs to a miner or upgrader or whatever, just get it.
 
 
