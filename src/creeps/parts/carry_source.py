@@ -150,8 +150,8 @@ class CarrySource:
             if source and (source.pos != None or source.x and source.y):
                 self.creep.memory.source = source.id
                 return source
-        if self.creep.memory.cls != 'upgrader':  # XXX
-            print(self, 'no source!')
+        if self.creep.memory.cls != 'upgrader' and self.creep.memory.cls != 'hauler':
+            print(self, 'no source!', self.creep.memory.cls)
 
     @classmethod
     def _get_neighboring_nonempty_link(cls, creep):
