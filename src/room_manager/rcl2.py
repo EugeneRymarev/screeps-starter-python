@@ -111,22 +111,25 @@ class RoomManagerRCL2(AbstractRoomManager):
 
         to_construct = [s.progressTotal - s.progress for s in room.find(FIND_CONSTRUCTION_SITES)]
 
-        rampart_filter = lambda s: (
-            s.structureType == STRUCTURE_RAMPART and s.hits < fortify_hp
-        )
-        ramparts_to_fortify = [max(0, fortify_hp - s.hits) for s in room.find(FIND_MY_STRUCTURES, {'filter': rampart_filter})]
-
-        wall_filter = lambda s: (
-            s.structureType == STRUCTURE_WALL and s.hits < fortify_hp
-        )
-        walls_to_fortify = [max(0, fortify_hp - s.hits) for s in room.find(FIND_STRUCTURES, {'filter': wall_filter})]
-
-        to_construct_sum = sum(to_construct)
         to_fortify = 0
         if to_construct_sum == 0:
-            to_fortify = sum(ramparts_to_fortify) + sum(walls_to_fortify)
+            rampart_filter = lambda s: (
+                s.structureType == STRUCTURE_RAMPART and s.hits < fortify_hp
+            )
+            ramparts_to_fortify = [max(0, fortify_hp - s.hits) for s in room.find(FIND_MY_STRUCTURES, {'filter': rampart_filter})]
+
+            wall_filter = lambda s: (
+                s.structureType == STRUCTURE_WALL and s.hits < fortify_hp
+            )
+            walls_to_fortify = [max(0, fortify_hp - s.hits) for s in room.find(FIND_STRUCTURES, {'filter': wall_filter})]
+
+            to_fortify = _.sum(ramparts_to_fortify) + _.sum(walls_to_fortify)
             if to_fortify > (fortify_hp/10):
-                to_construct_sum = 1000  # fortify slowly
+                to_construct.append(5002)  # fortify slowly
+        to_construct_sum = _.sum(to_construct)
+        #print('TO_CONSTRUCT_SUM', room.name, to_construct_sum, to_construct)
+        #print('RAMPARTS_TO_FORTIFY', _.sum(ramparts_to_fortify), len(ramparts_to_fortify))
+        #print('WALLS_TO_FORTIFY', _.sum(walls_to_fortify), len(walls_to_fortify))
         builders = self.creep_registry.count_of_type(room, 'builder')
         extractors = self.creep_registry.count_of_type(room, 'extractor')
         miners = self.creep_registry.count_of_type(room, 'miner')
@@ -169,7 +172,7 @@ class RoomManagerRCL2(AbstractRoomManager):
            to_construct_sum > 3000 and builders < 2 or \
            to_construct_sum > 0 and builders < 1:
             # builders first to make containers for mining
-            to_construct_max = max(to_construct)
+            to_construct_max = _.max(to_construct)
             to_construct_avg = sum(to_construct) / len(to_construct)
             if room.energyAvailable >= 1000:
                 if to_construct_max >= 5001: # terminal and storage

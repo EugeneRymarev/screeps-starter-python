@@ -30,14 +30,6 @@ link_filter = lambda s: (
     s.structureType == STRUCTURE_LINK
 )
 
-rampart_filter = lambda s: (
-    s.structureType == STRUCTURE_RAMPART and s.hits < 1000000
-)
-
-wall_filter = lambda s: (
-    s.structureType == STRUCTURE_WALL and s.hits < 1000000
-)
-
 non_full_link_filter = lambda s: (
     s.structureType == STRUCTURE_LINK and s.energy < s.energyCapacity
 )
@@ -50,6 +42,21 @@ class WorkTarget:
 
     @classmethod
     def _get_closest_fortification(cls, creep):
+        # TODO: refactor - it's also in rcl2
+        fortify_hp = 1000000
+        controller_flag = Game.flags[creep.room.name]
+        new_fortify_hp = controller_flag.memory['fortify_hp']
+        if new_fortify_hp != undefined:
+            fortify_hp = int(new_fortify_hp)
+
+        rampart_filter = lambda s: (
+            s.structureType == STRUCTURE_RAMPART and s.hits < fortify_hp
+        )
+
+        wall_filter = lambda s: (
+            s.structureType == STRUCTURE_WALL and s.hits < fortify_hp
+        )
+
         rampart = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {'filter': rampart_filter})
         if rampart != undefined and rampart:
             return rampart
