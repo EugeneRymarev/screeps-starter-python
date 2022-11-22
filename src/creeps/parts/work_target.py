@@ -45,9 +45,10 @@ class WorkTarget:
         # TODO: refactor - it's also in rcl2
         fortify_hp = 1000000
         controller_flag = Game.flags[creep.room.name]
-        new_fortify_hp = controller_flag.memory['fortify_hp']
-        if new_fortify_hp != undefined:
-            fortify_hp = int(new_fortify_hp)
+        if controller_flag != undefined:
+            new_fortify_hp = controller_flag.memory['fortify_hp']
+            if new_fortify_hp != undefined:
+                fortify_hp = int(new_fortify_hp)
 
         rampart_filter = lambda s: (
             s.structureType == STRUCTURE_RAMPART and s.hits < fortify_hp

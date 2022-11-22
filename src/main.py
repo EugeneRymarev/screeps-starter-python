@@ -87,9 +87,9 @@ def main():
         actions = creep_class(creep, creep.name, creep_registry).run()
         #print('actions for', creep, 'are', actions)
         all_actions.append(actions)
-        if creep.name == 'Jordyn':
-            for action in actions:
-                print('action', action)
+        #if creep.name == 'Jordyn':
+        #    for action in actions:
+        #        print('action', action)
 
     creeps_time = Game.cpu.getUsed() - registry_time - imports
 
@@ -108,9 +108,7 @@ def main():
 
         # TODO: cache tower list
         towers = []
-        for s in room.find(FIND_MY_STRUCTURES):
-            if s.structureType != STRUCTURE_TOWER:
-                continue
+        for s in room.find(FIND_MY_STRUCTURES, filter=lambda s: s.structureType == STRUCTURE_TOWER):
             towers.append(s)
 
         busy_tower_ids = set()
@@ -122,9 +120,15 @@ def main():
             break
 
         for s in room.find(FIND_STRUCTURES):
-            if s.structureType != STRUCTURE_ROAD:  # or room.name != 'W25N3':
-                continue
-            if s.hits <= s.hitsMax-1000:
+            target = None
+            if s.structureType == STRUCTURE_ROAD:  # or room.name != 'W25N3':
+                if s.hits <= s.hitsMax-1000:
+                    target = s
+            elif s.structureType == STRUCTURE_RAMPART:
+                if s.hits <= 2000:
+                    target = s
+
+            if target:
                 for tower in towers:
                     if tower.id in busy_tower_ids or tower.store[RESOURCE_ENERGY] < 10:
                         continue
@@ -133,6 +137,7 @@ def main():
                     tower.repair(s)  # TODO: action with priority
                     busy_tower_ids.add(tower.id)
                     break
+
             if len(towers) == len(busy_tower_ids):
                 break
 

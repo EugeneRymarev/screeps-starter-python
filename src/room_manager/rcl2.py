@@ -79,8 +79,8 @@ class RoomManagerRCL2(AbstractRoomManager):
                         pass
                     elif Game.creeps[claim_target + '_bminer1'] == undefined:  # or Game.creeps[claim_target + '_bminer1'].ticksToLive:
                         spawn.spawnCreep(miner_spec, claim_target + "_bminer1", {"memory": {"cls": "miner", "room": claim_target}})
-                    elif Game.creeps[claim_target + '_bminer2'] == undefined:
-                        spawn.spawnCreep(miner_spec, claim_target + "_bminer2", {"memory": {"cls": "miner", "room": claim_target}})
+                    #elif Game.creeps[claim_target + '_bminer2'] == undefined:
+                    #    spawn.spawnCreep(miner_spec, claim_target + "_bminer2", {"memory": {"cls": "miner", "room": claim_target}})
 
                     elif Game.creeps[claim_target + '_bbuilder1'] == undefined:
                         spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], claim_target + "_bbuilder1", {"memory": {"cls": "builder", "room": claim_target}})
@@ -112,24 +112,25 @@ class RoomManagerRCL2(AbstractRoomManager):
         to_construct = [s.progressTotal - s.progress for s in room.find(FIND_CONSTRUCTION_SITES)]
 
         to_fortify = 0
-        if to_construct_sum == 0:
-            rampart_filter = lambda s: (
-                s.structureType == STRUCTURE_RAMPART and s.hits < fortify_hp
-            )
-            ramparts_to_fortify = [max(0, fortify_hp - s.hits) for s in room.find(FIND_MY_STRUCTURES, {'filter': rampart_filter})]
+        if len(to_construct) == 0:
+            #rampart_filter = lambda s: (
+            #    s.structureType == STRUCTURE_RAMPART and s.hits < fortify_hp
+            #)
+            #ramparts_to_fortify = [max(0, fortify_hp - s.hits) for s in room.find(FIND_MY_STRUCTURES, {'filter': rampart_filter})]
 
             wall_filter = lambda s: (
-                s.structureType == STRUCTURE_WALL and s.hits < fortify_hp
+                (s.structureType == STRUCTURE_WALL or s.structureType == STRUCTURE_RAMPART) and s.hits < fortify_hp
             )
             walls_to_fortify = [max(0, fortify_hp - s.hits) for s in room.find(FIND_STRUCTURES, {'filter': wall_filter})]
 
-            to_fortify = _.sum(ramparts_to_fortify) + _.sum(walls_to_fortify)
+            #to_fortify = _.sum(ramparts_to_fortify) + _.sum(walls_to_fortify)
+            to_fortify = _.sum(walls_to_fortify)
             if to_fortify > (fortify_hp/10):
                 to_construct.append(5002)  # fortify slowly
+            #print('RAMPARTS_TO_FORTIFY', _.sum(ramparts_to_fortify), len(ramparts_to_fortify))
+            print('WALLS_TO_FORTIFY', _.sum(walls_to_fortify), len(walls_to_fortify))
         to_construct_sum = _.sum(to_construct)
-        #print('TO_CONSTRUCT_SUM', room.name, to_construct_sum, to_construct)
-        #print('RAMPARTS_TO_FORTIFY', _.sum(ramparts_to_fortify), len(ramparts_to_fortify))
-        #print('WALLS_TO_FORTIFY', _.sum(walls_to_fortify), len(walls_to_fortify))
+        print('TO_CONSTRUCT_SUM', room.name, to_construct_sum, to_construct)
         builders = self.creep_registry.count_of_type(room, 'builder')
         extractors = self.creep_registry.count_of_type(room, 'extractor')
         miners = self.creep_registry.count_of_type(room, 'miner')

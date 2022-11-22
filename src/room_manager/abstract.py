@@ -1,5 +1,8 @@
+__pragma__('noalias', 'keys')
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')
+
+from defs import *
 
 from utils import get_first_spawn
 from utils.errors import ERRORS
@@ -22,7 +25,8 @@ class AbstractRoomManager:
         self.room = room
         self.creep_registry = creep_registry
         self.enable_building = enable_building
-        #self.enable_building = False  # TODO: build the spawn itself, then abort?
+        #if room.name == 'W26N3':
+        #    self.enable_building = False
 
     def run(self):
         harvesters = self.creep_registry.count_of_type(self.room, 'harvester')
@@ -47,6 +51,8 @@ class AbstractRoomManager:
 
         if Game.time % self.SPAWN_SCHEDULE == (room_id+1) % self.SPAWN_SCHEDULE:
             self.spawn_creeps()
+        #elif self.room.name == 'W27N3':
+        #    self.spawn_creeps()
 
         our_links = g_links.get(self.room.name)
         if our_links == undefined:
