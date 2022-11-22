@@ -106,6 +106,10 @@ class EasyCreep(AbstractCreep, Carry, Work):
             actions.append(ScheduledAction.moveTo(creep, target, on_error=reset_target))
             return actions
 
+        if target.creep != undefined:  # tombstone?
+            print('NotImplementedError: tombstone target detectred but not implemented!', creep, target)
+            pass
+
         # If we are targeting a spawn or extension, transfer energy. Otherwise, use upgradeController on it.
         if target.energyCapacity:
             actions = []
