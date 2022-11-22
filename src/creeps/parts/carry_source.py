@@ -5,6 +5,7 @@ from creeps.scheduled_action import ScheduledAction
 
 
 extension_filter = lambda s: s.structureType == STRUCTURE_EXTENSION
+link_filter = lambda s: s.structureType == STRUCTURE_LINK
 
 
 class CarrySource:
@@ -45,8 +46,8 @@ class CarrySource:
                 return False  # not enough energy
 
             if s.structureType == STRUCTURE_LINK:
-                if len(s.pos.findInRange(FIND_MY_STRUCTURES, 2, filter=extension_filter)) == 0:
-                    # when refilling don't take from a link if it's not near an extensions
+                if len(s.pos.findInRange(FIND_MY_STRUCTURES, 9, filter=link_filter)) == 0:
+                    # when refilling from a link don't use one if there are no links nearby
                     return False
             return True
         result = creep.pos.findClosestByRange(FIND_STRUCTURES, filter=source_filter)
