@@ -96,7 +96,7 @@ class Miner(AbstractCreep, Carry):
                         # NOTE: this requires EasyCreep
                         if creep.store[RESOURCE_ENERGY] >= creep.store.getCapacity(RESOURCE_ENERGY) * 0.5:  # TODO even more appropriate value?
                             repair = self._get_nearby_repair_action()
-                            if len(repair) and Game.time % 5 == 0:
+                            if len(repair) and (Game.time + int(creep.room.controller.id)) % 7 == 0:
                                 a = ScheduledAction.repair(creep, repair)
                                 a.priority = 20
                                 actions.append(a)
