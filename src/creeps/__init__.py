@@ -8,6 +8,7 @@ from creeps.upgrader import Upgrader
 from creeps.settler import Settler
 from creeps.cleanser import Cleanser
 from creeps.extractor import Extractor
+from creeps.operator import Operator
 
 
 CREEP_CLASSES = dict({
@@ -21,4 +22,5 @@ CREEP_CLASSES = dict({
     'settler': Settler,
     'cleanser': Cleanser,
     'extractor': Extractor,
+    'operator': Operator,
 })

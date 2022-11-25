@@ -135,6 +135,7 @@ class RoomManagerRCL2(AbstractRoomManager):
         extractors = self.creep_registry.count_of_type(room, 'extractor')
         miners = self.creep_registry.count_of_type(room, 'miner')
         haulers = self.creep_registry.count_of_type(room, 'hauler')
+        operators = self.creep_registry.count_of_type(room, 'operator')
         dropped_sum = sum([r.amount for r in room.find(FIND_DROPPED_RESOURCES)])
         size = room_sizes[room]
         if size == undefined:             # TODO: fill it aggresively, don't wait
@@ -143,6 +144,7 @@ class RoomManagerRCL2(AbstractRoomManager):
         sources = search_room(room, FIND_SOURCES)
         desired_haulers = max(1, int(size / 7))  # TODO: can use less larger ones
 
+        desired_operators = 0
         desired_extractors = 0
         if room.controller.level == 4 and room.energyCapacityAvailable >= 1300:
             desired_haulers = desired_haulers / 2
@@ -303,6 +305,17 @@ class RoomManagerRCL2(AbstractRoomManager):
             #        CARRY,
             #        MOVE,
             #    ], "", {'cls': 'extractor'})
+
+        elif operators < desired_operators:
+            if room.energyAvailable >= 750:
+                spawn.createCreep([
+                    CARRY, CARRY,
+                    CARRY, CARRY,
+                    CARRY, CARRY,
+                    CARRY, CARRY,
+                    CARRY, CARRY,
+                    MOVE, MOVE, MOVE, MOVE, MOVE,
+                ], "", {'cls': 'operator'})
 
         if to_construct > 300:
             return
