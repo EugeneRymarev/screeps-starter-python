@@ -9,6 +9,7 @@ from creeps.abstract import AbstractCreep
 class Claimer(AbstractCreep):
     DEBUG = True
     ICON = '⛪'
+    ACTION = ScheduledAction.claimController
     def _run(self):
         super()._run()
         creep = self.creep
@@ -25,4 +26,4 @@ class Claimer(AbstractCreep):
             #find_creeps
             # filter: creep.my and creep.parts has CLAIM and not creep.pos.isNearTo(controller)
             return [ScheduledAction.attackController(creep, controller)]
-        return [ScheduledAction.claimController(creep, controller)]
+        return [self.ACTION(creep, controller)]

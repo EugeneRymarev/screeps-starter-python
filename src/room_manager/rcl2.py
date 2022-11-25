@@ -44,6 +44,7 @@ class RoomManagerRCL2(AbstractRoomManager):
 
         # XXX XXX XXX // big temp section \\
 
+        claim_target = None
         fortify_hp = 1000000
         if controller_flag != undefined:
             print('we have a controller flag!')
@@ -53,7 +54,7 @@ class RoomManagerRCL2(AbstractRoomManager):
                 fortify_hp = int(new_fortify_hp)
 
             claim_target = controller_flag.memory['claim']
-            if claim_target != undefined:
+            if claim_target:  # != undefined:
                 print('and a claim target!')
                 #if target_time <= Game.time and Game.time <= (target_time + 600):
                 target_room = Game.rooms[claim_target]
@@ -369,8 +370,13 @@ class RoomManagerRCL2(AbstractRoomManager):
         spawn = get_controller_spawn(room)
         if spawn.spawning:
             return  # spawn is busy
-        if to_construct_sum > 2000 and room.controller.ticksToDowngrade > 1000:
-            return  # we have stuff to build, lets not use energy for upgrade right now
+
+        if room.controller.ticksToDowngrade < 1000:
+            pass  # we really need an upgrader
+        elif to_construct_sum > 2000:
+            return  # we have stuff to build, lets not use energy for upgrades right now
+        elif claim_target:
+            return  # we are claiming another room, that needs all the energy it can get
 
         #if room.controller.ticksToDowngrade > 1000:
         #    # XXX: temporarily disable spawning upgraders so that we can build new rooms
