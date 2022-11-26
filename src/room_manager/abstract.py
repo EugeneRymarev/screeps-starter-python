@@ -8,6 +8,7 @@ from utils import get_first_spawn
 from utils.errors import ERRORS
 
 g_links = dict()
+g_labsets = dict()
 
 
 class AbstractRoomManager:
