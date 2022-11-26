@@ -23,6 +23,8 @@ class Harvester(EasyCreep):
         result.append(self._get_nearby_energetic_tombstones)
         result.append(self._get_dropped_resource)
         if self.creep.room.energyCapacityAvailable - self.creep.room.energyAvailable >= 1 or self.creep.memory.cls == 'builder':
+            if self.creep.memory.cls == 'upgrader':  # or self.creep.memory.cls == 'builder':
+                result.append(self._get_closest_link)
             result.append(self._get_refill_source)
         result.append(self._get_random_energetic_ruin)
         if not self.class_exists('hauler'):
