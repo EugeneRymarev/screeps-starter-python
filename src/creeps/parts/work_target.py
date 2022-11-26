@@ -49,6 +49,7 @@ class WorkTarget:
             new_fortify_hp = controller_flag.memory['fortify_hp']
             if new_fortify_hp != undefined:
                 fortify_hp = int(new_fortify_hp)
+        fortify_hp = min(fortify_hp, RAMPART_HITS_MAX[creep.room.controller.level])
 
         rampart_filter = lambda s: (
             s.structureType == STRUCTURE_RAMPART and s.hits < fortify_hp
@@ -59,10 +60,10 @@ class WorkTarget:
         )
 
         rampart = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {'filter': rampart_filter})
-        if rampart != undefined and rampart:
+        if rampart:
             return rampart
         wall = creep.pos.findClosestByRange(FIND_STRUCTURES, {'filter': wall_filter})
-        if wall != undefined and wall:
+        if wall:
             return wall
         return None
 
