@@ -89,21 +89,23 @@ class Miner(AbstractCreep, Carry):
                             for structure in structures:
                                 if structure.structureType == STRUCTURE_CONTAINER:
                                     miner_container = structure
+                        harvesting = False
                         if source.energy != 0 and (creep.store.getFreeCapacity(RESOURCE_ENERGY) >= 1 or creep.store.getCapacity(RESOURCE_ENERGY) == 0 or (miner_container and miner_container.store.getFreeCapacity(RESOURCE_ENERGY) >= 1)):
                             actions.append(
                                 ScheduledAction.harvest(creep, source)
                             )
+                            harvesting = True
                         # NOTE: this requires EasyCreep
-                        if creep.store[RESOURCE_ENERGY] >= creep.store.getCapacity(RESOURCE_ENERGY) * 0.5:  # TODO even more appropriate value?
+                        if not harvesting and (creep.store[RESOURCE_ENERGY] >= creep.store.getCapacity(RESOURCE_ENERGY) * 0.5):  # TODO even more appropriate value?
                             repair = self._get_nearby_repair_action()
                             if len(repair) and (Game.time + int(creep.room.controller.id)) % 7 == 0:
                                 a = ScheduledAction.repair(creep, repair)
                                 a.priority = 20
                                 actions.append(a)
-                            #else:
-                            #    build = self._get_nearby_build_action()
-                            #    if build:
-                            #        actions.append(ScheduledAction.build(creep, build, priority=20))
+                            else:
+                                build = self._get_nearby_build_action()
+                                if build:
+                                    actions.append(ScheduledAction.build(creep, build, priority=20))
                             if creep.room.controller.pos.inRangeTo(creep.pos.x, creep.pos.y, 3):  # we are close to the controller
                                 to_construct = [s.progressTotal - s.progress for s in room.find(FIND_CONSTRUCTION_SITES)]
                                 if sum(to_construct) == 0:
