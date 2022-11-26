@@ -489,6 +489,13 @@ class RoomManagerRCL2(AbstractRoomManager):
         # TODO: don't do it every tick
         room = self.room
 
+        for s in room.find(FIND_HOSTILE_STRUCTURES):
+            if s.structureType != STRUCTURE_STORAGE and s.structureType != STRUCTURE_TERMINAL and not s.store:  # or not s.store.getUsedCapacity()):
+                print('destroying hostile structure at', room.name, ':', s.structureType, '@', s.pos, s.store, s.store.getUsedCapacity())
+                s.destroy()
+            else:
+                print('keeping hostile structure at', room.name, ':', s.structureType, '@', s.pos, s.store, s.store.getUsedCapacity())
+
         # shaped farms first
         if room.energyCapacityAvailable < 550:  # all extensions were not built yet
             #eree
