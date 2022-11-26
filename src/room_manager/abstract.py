@@ -55,7 +55,7 @@ class AbstractRoomManager:
         #    self.spawn_creeps()
 
         our_links = g_links.get(self.room.name)
-        if our_links == undefined:
+        if not our_links and self.room.level >= 5:
             #Game.notify(
             print(
                 'Global reset detected at ' + self.room.name + ', current bucket: ' + str(Game.cpu.bucket),
