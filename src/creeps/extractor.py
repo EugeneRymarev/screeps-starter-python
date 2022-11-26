@@ -24,14 +24,16 @@ class Extractor(AbstractCreep, Carry):
     ICON = '🛢️'
 
     def _should_mine(self, mineral):
-        if mineral.ticksToRegeneration == undefined:
-            return True  # new source
-        elif mineral.mineralAmount == 0:
+        #if mineral.ticksToRegeneration == undefined:
+        #    return True  # new source
+        if mineral.mineralAmount == 0:
             return False
-        found = creep.room.lookForAt(LOOK_STRUCTURES, mineral.pos)
+        found = mineral.pos.lookFor(LOOK_STRUCTURES)
         for s in found:
             if s.structureType == STRUCTURE_EXTRACTOR:
+                #print('s.cooldown', s.cooldown, self.creep.name)
                 return s.cooldown == 0
+        print('WARNING: no extractor found?', self.creep.name)
         return False
 
     def _run(self):

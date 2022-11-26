@@ -191,6 +191,12 @@ class AbstractRoomManager:
     def build_spawn(self, x, y):
         return self.build(STRUCTURE_SPAWN, x, y)
 
+    def build_extractor(self):
+        minerals = self.room.find(FIND_MINERALS)
+        if minerals:
+            pos = minerals[0].pos
+        return self.build(STRUCTURE_EXTRACTOR, pos.x, pos.y)
+
     def get_miner_container_positions(self, sources):
         room = self.room
         map_size = 0
@@ -221,7 +227,5 @@ class AbstractRoomManager:
                 if len(structures):
                     print('adding miner_container', structures[0])
                     miner_containers.append(structures[0])
-        else:
-            print('no missing miner containers', miner_containers)
         return miner_containers, source_to_controller_paths, map_size
 

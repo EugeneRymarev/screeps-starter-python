@@ -47,11 +47,11 @@ class EasyCreep(AbstractCreep, Carry, Work):
         super()._run()
         creep = self.creep
         # If we're full, stop filling up and remove the saved source
-        if creep.memory.filling and self.energy(creep) >= creep.carryCapacity:
+        if creep.memory.filling and creep.store.getFreeCapacity(RESOURCE_ENERGY) == 0:
             creep.memory.filling = False
             del creep.memory.source
         # If we're empty, start filling again and remove the saved target
-        elif not creep.memory.filling and creep.store.getUsedCapacity() <= 0:
+        elif not creep.memory.filling and creep.store.getUsedCapacity(RESOURCE_ENERGY) <= 0:
             creep.memory.filling = True
             del creep.memory.target
 
@@ -149,10 +149,11 @@ class EasyCreep(AbstractCreep, Carry, Work):
             return [action]
 
         # store
-        if target.my and target.store:
-            for r in Object.keys(creep.store):
-                if r != RESOURCE_ENERGY:
-                    return [ScheduledAction.transfer(creep, target, r, on_error=reset_target)]
+        if target.store and (target.my or target.structureType == STRUCTURE_CONTAINER):
+            if target.structureType == STRUCTURE_STORAGE or target.structureType == STRUCTURE_TERMINAL:
+                for r in Object.keys(creep.store):
+                    if r != RESOURCE_ENERGY:
+                        return [ScheduledAction.transfer(creep, target, r, on_error=reset_target)]
             actions = [ScheduledAction.transfer(creep, target, RESOURCE_ENERGY, on_error=reset_target)]
             #if target.store.getFreeCapacity(RESOURCE_ENERGY) >= self.energy(creep):
             #    #print(creep, 'gooooo2')  # TODO XXX: flaps near storage if room really needs refill

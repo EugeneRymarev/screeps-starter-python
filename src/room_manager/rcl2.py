@@ -530,11 +530,13 @@ class RoomManagerRCL2(AbstractRoomManager):
                 if len(otherpath) > 2:
                     self.build_spawn(otherpath[1].x, otherpath[1].y)
 
-        if spawn is None or spawn == undefined:
-            #return  # no spawn yet and no construction site.
-            return
+        if not spawn:
+            return  # no spawn yet and no construction site.
         else:
             spawn_pos = spawn.pos
+
+        if room.controller.level >= 6:
+            self.build_extractor()
 
         if room.controller.level == 5 and len(sources) == 2:
             path = room.findPath(sources[0].pos, sources[1].pos, {'ignoreCreeps': True})
@@ -619,7 +621,7 @@ class RoomManagerRCL2(AbstractRoomManager):
                 self.debug_log(what + ' has no link, apparently')
 
         for miner_container in miner_containers:
-            if miner_container == undefined:
+            if not miner_container:
                 continue
             #print(miner_container)
             if miner_container.pos != undefined:  # FIXME wtf
