@@ -75,13 +75,15 @@ class Miner(AbstractCreep, Carry):
                     #                ScheduledAction.transfer(creep, s, RESOURCE_ENERGY, priority=80)
                     #            )
                     #        break  # only handle one link
-                    dropped = self._get_nearby_dropped_resource(creep)
-                    if dropped:
-                        dropped = [s for s in dropped if s.pos != creep.pos]
-                        if dropped is not None and dropped != undefined:
-                            actions.append(
-                                ScheduledAction.pickup(creep, dropped[0], lambda: 0)
-                            )
+
+                    # causes pickup errors, but really do we need it for anything? hauler will take care of it
+                    #dropped = self._get_nearby_dropped_resource(creep)
+                    #if dropped:
+                    #    dropped = [s for s in dropped if s.pos != creep.pos]
+                    #    if dropped:
+                    #        actions.append(
+                    #            ScheduledAction.pickup(creep, dropped[0])
+                    #        )
                     if self._should_mine(source):
                         miner_container = None
                         structures = room.lookForAt(LOOK_STRUCTURES, creep.pos.x, creep.pos.y)
