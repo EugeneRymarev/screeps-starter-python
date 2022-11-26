@@ -498,7 +498,7 @@ class RoomManagerRCL2(AbstractRoomManager):
         room = self.room
 
         for s in room.find(FIND_HOSTILE_STRUCTURES):
-            if s.structureType != STRUCTURE_STORAGE and s.structureType != STRUCTURE_TERMINAL and not s.store:  # or not s.store.getUsedCapacity()):
+            if not s.store or s.store.getUsedCapacity() == 0:
                 print('destroying hostile structure at', room.name, ':', s.structureType, '@', s.pos, s.store, s.store.getUsedCapacity())
                 s.destroy()
             else:
