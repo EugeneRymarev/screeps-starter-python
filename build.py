@@ -231,22 +231,24 @@ def upload(config):
         auth_pair = config.username.encode('utf-8') + b':' + config.password.encode('utf-8')
         headers['Authorization'] = b'Basic ' + base64.b64encode(auth_pair)
 
-    request = urllib.request.Request(post_url, post_data, headers)
-    if config.url != 'https://screeps.com':
-        print("uploading files to {}, branch {}{}..."
-              .format(config.url, config.branch, " on PTR" if config.ptr else ""))
-    else:
-        print("uploading files to branch {}{}...".format(config.branch, " on PTR" if config.ptr else ""))
+    for i in range(3):
+        request = urllib.request.Request(post_url, post_data, headers)
+        if config.url != 'https://screeps.com':
+            print("uploading files to {}, branch {}{}..."
+                  .format(config.url, config.branch, " on PTR" if config.ptr else ""))
+        else:
+            print("uploading files to branch {}{}...".format(config.branch, " on PTR" if config.ptr else ""))
 
-    # any errors will be thrown.
-    with urllib.request.urlopen(request, timeout=3) as response:
-        decoded_data = response.read().decode('utf-8')
-        json_response = json.loads(decoded_data)
-        if not json_response.get('ok'):
-            if 'error' in json_response:
-                raise Exception("upload error: {}".format(json_response['error']))
-            else:
-                raise Exception("upload error: {}".format(json_response))
+        # any errors will be thrown.
+        with urllib.request.urlopen(request, timeout=3) as response:
+            decoded_data = response.read().decode('utf-8')
+            json_response = json.loads(decoded_data)
+            if i == 2:
+                if not json_response.get('ok'):
+                    if 'error' in json_response:
+                        raise Exception("upload error: {}".format(json_response['error']))
+                    else:
+                        raise Exception("upload error: {}".format(json_response))
 
     print("upload successful.")
 
