@@ -243,12 +243,14 @@ def upload(config):
         with urllib.request.urlopen(request, timeout=3) as response:
             decoded_data = response.read().decode('utf-8')
             json_response = json.loads(decoded_data)
-            if i == 2:
-                if not json_response.get('ok'):
-                    if 'error' in json_response:
-                        raise Exception("upload error: {}".format(json_response['error']))
-                    else:
-                        raise Exception("upload error: {}".format(json_response))
+            if json_response.get('ok'):
+                break
+            if i != 2:
+                continue
+            if 'error' in json_response:
+                raise Exception("upload error: {}".format(json_response['error']))
+            else:
+                raise Exception("upload error: {}".format(json_response))
 
     print("upload successful.")
 
