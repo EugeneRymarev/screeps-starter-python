@@ -332,28 +332,6 @@ class RoomManagerRCL2(AbstractRoomManager):
         if to_construct > 300:
             return
 
-        # claimer
-
-        ###################################################
-        claimername = room.name + 'cla'
-        if room.name == 'W27N1' and False:
-            if room.energyCapacityAvailable >= 3250 and Game.creeps[claimername] == undefined:
-                e = Game.spawns['W27N1-2'].spawnCreep(  # TODO: use spawnCreep everywhere
-                    [
-                        CLAIM, CLAIM, CLAIM, CLAIM, CLAIM,
-                        MOVE, MOVE, MOVE, MOVE, MOVE,
-                    ],
-                    claimername,
-                    {
-                        'memory': {'cls': 'claimer', 'room': 'W25N3'}, #, 'wp_room': 'W26N2', 'wp_room2': 'W26N3'},
-                        'directions': [BOTTOM],
-                    }
-                )
-                print('============= YEAH', e)
-            else:
-                print('============= NOPE')
-        ###################################################
-
         # upgraders
 
         #  eee
