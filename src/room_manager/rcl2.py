@@ -9,6 +9,7 @@ from utils import search_room
 from utils import P
 from utils import around_range
 from utils import part_count
+from utils import distance_from_controller
 
 from room_manager.abstract import AbstractRoomManager
 from room_manager.links import Links
@@ -654,26 +655,54 @@ class RoomManagerRCL2(AbstractRoomManager):
         #for road in roads:
         #    room.visual.poly([(point.x, point.y) for point in road], {'stroke': '#00ff00'})
 
-        #for s in room.find(FIND_STRUCTURES):
-        #    if s.structureType == STRUCTURE_ROAD:
-        #        s.destroy()
+        def has_road(room, point):
+            for s in room.lookForAt(LOOK_STRUCTURES, point.x, point.y):
+                if s.structureType == STRUCTURE_ROAD and s.hits >= 1:
+                    has_road = True
+                    return True
+            return False
 
-        built_something = False
+        build_something = False
         for road in roads:
             for point in road:
-                has_road = False
-                for s in room.lookForAt(LOOK_STRUCTURES, point.x, point.y):
-                    if s.structureType == STRUCTURE_ROAD and s.hits >= 1:
-                        has_road = True
-                        break
-                if not has_road or not self.enable_building:
-                    built_something = True
-            if built_something:
+                if not has_road(room, point) or not self.enable_building:
+                    build_something = True
+            if build_something:
                 self.build_roads(road)
                 if self.enable_building:
-                    break  # build roads incrementally
+                    break  # build roads one by one
 
+        # basic extension planner
+        terrain = room.getTerrain()
+        positions = []
+        for road in roads:
+            for point in road:
+                pos_o = self.room.getPositionAt(point.x, point.y)
+                for pos in around_range(room, point.x, point.y, 1, vis='red'):
+                    if terrain.get(pos[0], pos[1]) == 1:
+                        continue
+                    structures = room.lookForAt(LOOK_STRUCTURES, pos[0], pos[1])
+                    if len(structures) >= 1 and structures[0].structureType != STRUCTURE_EXTENSION:
+                        continue
+                    if distance_from_controller(room, pos[0], pos[1]) <= 4:
+                        continue
+                    close_to_miner_container = False
+                    for miner_container in miner_containers:
+                        if miner_container.pos != undefined:  # FIXME wtf
+                            miner_container = miner_container.pos
+                        if miner_container.getRangeTo(pos[0], pos[1]) <= 2:
+                            close_to_miner_container = True
+                            break
+                    if close_to_miner_container:
+                        continue
+                    #if has_road(room, pos):
+                    #    continue
 
+                    pos_o = self.room.getPositionAt(pos[0], pos[1])
+                    room.visual.circle(pos_o, {'stroke': 'red'})
+                    positions.append(pos)
+                    #room.visual.circle(pos, {'stroke': 'yellow'})
+                    #self.build_extension(spawn_pos.x,   spawn_pos.y-2)
 
 
 #            break

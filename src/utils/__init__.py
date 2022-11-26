@@ -108,3 +108,6 @@ def points_to_path(points):
     ]
 
 
+def distance_from_controller(room, x, y):
+    return room.controller.pos.getRangeTo(x, y)
+
