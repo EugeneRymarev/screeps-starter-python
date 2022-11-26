@@ -122,8 +122,10 @@ class EasyCreep(AbstractCreep, Carry, Work):
                 # maybe someone will pull from this container or spawn or something and in the next tick
                 # it would need to be filled again - but in that case we will run self.get_new_target() with
                 # next tick where we know what happened.
+                # TODO: this didn't work, the creep got the same target and kept moving onto it over and over
+                # the problem is with the simultaneous action sequence elimination or something, I guess?
                 target = self.get_new_target(creep)  # TODO XXX: but this should be a different one!
-                actions.append(ScheduledAction.moveTo(creep, target))
+                #actions.append(ScheduledAction.moveTo(creep, target))
             return actions
 
         # upgradeController
