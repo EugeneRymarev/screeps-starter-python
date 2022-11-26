@@ -239,7 +239,7 @@ def upload(config):
         print("uploading files to branch {}{}...".format(config.branch, " on PTR" if config.ptr else ""))
 
     # any errors will be thrown.
-    with urllib.request.urlopen(request) as response:
+    with urllib.request.urlopen(request, timeout=3) as response:
         decoded_data = response.read().decode('utf-8')
         json_response = json.loads(decoded_data)
         if not json_response.get('ok'):
