@@ -42,7 +42,7 @@ class Miner(AbstractCreep, Carry):
             print('WARNING:', self.creep, 'in', self.creep.room.name, "must mine at full speed because we won't mine fast enough to get it all even if we ran 100%")
             return True
 
-        should_have_mined = source.energyCapacity * ((ENERGY_REGEN_TIME-source.ticksToRegeneration)/ENERGY_REGEN_TIME)
+        should_have_mined = source.energyCapacity * ((ENERGY_REGEN_TIME-source.ticksToRegeneration-1)/ENERGY_REGEN_TIME)
         actually_mined = source.energyCapacity - source.energy
         if actually_mined <= should_have_mined:
             #print(self.creep.name, 'actually mining', should_have_mined, actually_mined)
