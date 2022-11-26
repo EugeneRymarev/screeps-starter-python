@@ -29,8 +29,9 @@ class RoomManagerRCL2(AbstractRoomManager):
         #    controller_flag = s
         #    break
         spawn = get_first_spawn(room)
-        print(',,, spawn_creeps() in', room.name)
-        if spawn is None or spawn == undefined or not spawn:  # TODO: check which one this really is
+        print('///////////////// spawn_creeps() in', room.name)
+        #if spawn is None or spawn == undefined or not spawn:  # TODO: check which one this really is
+        if not spawn:  # TODO: check which one this really is
             return  # no spawn yet
         if spawn.spawning:
             return
@@ -129,9 +130,9 @@ class RoomManagerRCL2(AbstractRoomManager):
             if to_fortify > (fortify_hp/10):
                 to_construct.append(5002)  # fortify slowly
             #print('RAMPARTS_TO_FORTIFY', _.sum(ramparts_to_fortify), len(ramparts_to_fortify))
-            print('WALLS_TO_FORTIFY', _.sum(walls_to_fortify), len(walls_to_fortify))
+            #print('WALLS_TO_FORTIFY', _.sum(walls_to_fortify), len(walls_to_fortify))
         to_construct_sum = _.sum(to_construct)
-        print('TO_CONSTRUCT_SUM', room.name, to_construct_sum, to_construct)
+        #print('TO_CONSTRUCT_SUM', room.name, to_construct_sum, to_construct)
         builders = self.creep_registry.count_of_type(room, 'builder')
         extractors = self.creep_registry.count_of_type(room, 'extractor')
         miners = self.creep_registry.count_of_type(room, 'miner')
@@ -146,6 +147,8 @@ class RoomManagerRCL2(AbstractRoomManager):
         desired_haulers = max(1, int(size / 7))  # TODO: can use less larger ones
 
         desired_operators = 0
+        #if room.name == 'W28N4':
+        #    desired_operators = 1
         desired_extractors = 0
         if room.controller.level == 4 and room.energyCapacityAvailable >= 1300:
             desired_haulers = desired_haulers / 2

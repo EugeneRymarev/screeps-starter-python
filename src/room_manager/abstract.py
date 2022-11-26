@@ -25,7 +25,7 @@ class AbstractRoomManager:
         self.room = room
         self.creep_registry = creep_registry
         self.enable_building = enable_building
-        #if room.name == 'W26N3':
+        #if room.name == 'W29N4':
         #    self.enable_building = False
 
     def run(self):

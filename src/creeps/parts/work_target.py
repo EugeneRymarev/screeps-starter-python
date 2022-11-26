@@ -104,7 +104,7 @@ class WorkTarget:
     @classmethod
     def _get_closest_nonfull_link(cls, creep):
         p = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {'filter': non_full_link_filter})
-        print(creep.room.name, 'closest_nonfull_links', p)
+        #print(creep.room.name, 'closest_nonfull_links', p)
         return p
 
     @classmethod
@@ -167,6 +167,7 @@ class WorkTarget:
 
     @classmethod
     def _get_random_non_miner_container(cls, creep):
+        #print(creep, 'running', '_get_random_non_miner_container')
         containers = []
         for s in creep.room.find(FIND_STRUCTURES):
             if s.structureType != STRUCTURE_CONTAINER:
@@ -183,7 +184,9 @@ class WorkTarget:
                 continue  # it's full or we'd overfill it. We'll come by later when it's more empty
             containers.append(s)
         if len(containers) >= 1:
+            #print('returning', containers[0])
             return containers[0]  # TODO: get a "random" one ha ha, maybe Creep.id + Game.time
+        #print('returning None')
 
     @classmethod
     def _get_storage(cls, creep):

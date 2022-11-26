@@ -165,6 +165,11 @@ class EasyCreep(AbstractCreep, Carry, Work):
             action = ScheduledAction.repair(creep, target, on_error=reset_target)
             action.priority = 5
             return [action]
+
+        if is_close:
+            print(creep, 'doing a fallback move towards', target, 'when it already arrived!')
+            #return []
+
         actions = []
         actions.append(ScheduledAction.moveTo(creep, target))
         #print('ERROR: not sure what', creep, 'should do with', target)

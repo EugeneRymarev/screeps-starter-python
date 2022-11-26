@@ -8,5 +8,5 @@ from creeps.claimer import Claimer
 
 class Reserver(Claimer):
     DEBUG = True
-    ICON = '⛪'
+    ICON = 'R'
     ACTION = ScheduledAction.claimController

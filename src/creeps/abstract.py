@@ -142,7 +142,10 @@ class AbstractCreep:
         override_actions = self.pre_run()
         if override_actions:
             return override_actions
-        return self._run()
+        actions = self._run()
+        #if self.DEBUG and self.creep.room.name == 'W29N4':
+        #    print('setting actions debug [', self.creep.name, ']:', str(actions))
+        return actions
 
     def _run(self):
         pass  #raise NotImplementedError
