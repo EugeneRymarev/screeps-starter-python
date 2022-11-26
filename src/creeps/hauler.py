@@ -50,15 +50,15 @@ class Hauler(Harvester):
         #our_links = g_links.get(creep.room.name)
         #if not our_links.operational():
         if creep.room.controller.level <= 5:
-            links = search_room(creep.room, FIND_STRUCTURES, lambda x: x.structureType == STRUCTURE_LINK)
+            targets.append(cls._get_random_non_miner_container)
+            targets.append(cls._get_nonfull_terminal)
+            targets.append(cls._get_nonfull_storage)
+            links = search_room(creep.room, FIND_MY_STRUCTURES, lambda x: x.structureType == STRUCTURE_LINK)
             if links != undefined:
                 sources = search_room(creep.room, FIND_SOURCES)
                 if len(links) < (len(sources) + 1):
-                    targets.extend(
-                        [
-                            cls._get_random_non_miner_container,
-                            cls._get_closest_nonfull_link,
-                        ]
+                    targets.append(
+                        cls._get_closest_nonfull_link,
                     )
         #if creep.room.controller.level >= 5:  # TODO: if not container, then ANY link will do
         #    targets.append(
@@ -91,10 +91,10 @@ class Hauler(Harvester):
         sources.append(self._get_neighboring_miner_container)
         sources.append(self._get_dropped_resource)
         sources.append(self._get_random_energetic_ruin)
+        sources.append(self._get_fullest_miner_container)  # take from mining container rather than storage, unless that's empty too
         if self.creep.room.controller.level <= 4:  # by level 4 everything the enemy has left should be drained already
             sources.append(self._get_closest_enemy_building)
         #if self.creep.room.controller.level <= 4:
-        sources.append(self._get_fullest_miner_container)
         #sources.append(self._get_closest_energetic_container)
         #else:
         #    sources.append(self._get_fullest_miner_container)  # TODO: this is until miners can figure out what to do with energy
