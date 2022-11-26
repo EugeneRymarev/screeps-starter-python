@@ -76,20 +76,24 @@ class AbstractCreep:
         else:
             target_flag_name = creep.name
 
-        target = Game.flags[target_flag_name]
-        if target:
-            if creep.pos.isEqualTo(target):
+        target_flag = Game.flags[target_flag_name]
+        if target_flag:
+            if creep.pos.isEqualTo(target_flag):
                 if self.REMOVE_FLAG_ON_ARRIVAL:
-                    target.remove()
+                    target_flag.remove()
                 else:
                     return []
-            elif creep.pos.isNearTo(target):
-                structures = target.pos.lookFor(LOOK_STRUCTURES)
-                if len(structures) and structures[0].structureType == STRUCTURE_SPAWN and structures[0].my:
-                    structures[0].recycleCreep(creep)
-                    target.remove()
-                    return []
-            return self.get_smart_move_actions(target.pos)
+            elif creep.pos.isNearTo(target_flag):
+                structures = target_flag.pos.lookFor(LOOK_STRUCTURES)
+                if len(structures) and structures[0].my:  # TODO: what if it's covered by a rampart?
+                    if structures[0].structureType == STRUCTURE_SPAWN:
+                        structures[0].recycleCreep(creep)
+                        target_flag.remove()
+                        return []
+                    elif structures[0].structureType == STRUCTURE_TERMINAL or structures[0].structureType == STRUCTURE_STORAGE:
+                        target_flag.remove()
+                        return [ScheduledAction.transfer(creep, structures[0], RESOURCE_ENERGY)]  # TODO: dump all
+            return self.get_smart_move_actions(target_flag.pos)
 
         if creep.memory.room != undefined and creep.memory.room != creep.room.name:
             target_room = Game.rooms[creep.memory.room]
