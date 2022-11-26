@@ -54,35 +54,43 @@ class RoomManagerRCL2(AbstractRoomManager):
             if new_fortify_hp != undefined:
                 fortify_hp = int(new_fortify_hp)
 
-            claim_target = controller_flag.memory['claim']
-            if claim_target:  # != undefined:
-                print('and a claim target!')
+            for type_ in ['claim', 'reserve']:
+                target = controller_flag.memory[type_]
                 #if target_time <= Game.time and Game.time <= (target_time + 600):
+                if not target:
+                    continue
+                print('and a', type_, 'target!')
+                target_room = Game.rooms[target]
+                if not target_room or not target_room.controller.my or (type_ == 'reserve' and target_room.controller.reservation and target_room.controller.reservation.ticksToEnd < 600):
+                    cls = type_ + 'er'
+                    name = target + '_' + cls
+                    if Game.creeps[name] == undefined and room.energyCapacityAvailable > 850:
+                        print('and we spawn a', cls, 'whoooo!!')
+                    spawn.spawnCreep([CLAIM, MOVE, MOVE, MOVE, MOVE, MOVE], name, {"memory": {"cls": cls, "room": claim_target}})
+                if type_ == 'claim':
+                    claim_target = target
+
+            if claim_target:
                 target_room = Game.rooms[claim_target]
-                if target_room == undefined or not target_room.controller.my:
-                    cls = 'claimer'
-                    # claim mode
-                    claimer_name = claim_target + '_' + cls
-                    if Game.creeps[claimer_name] == undefined and room.energyCapacityAvailable > 850:
-                        print('and we spawn a claimer, whoooo!!')
-                    spawn.spawnCreep([CLAIM, MOVE, MOVE, MOVE, MOVE, MOVE], claimer_name, {"memory": {"cls": cls, "room": claim_target}})
-                elif target_room != undefined or target_room.energyCapacityAvailable < 1300:
+                if target_room and target_room.energyCapacityAvailable < 1300:
                     # build and boost mode
                     if target_room.energyCapacityAvailable >= 1300:
                         controller_flag.remove()  # ok we are done
-                    elif Game.map.getRoomLinearDistance(room.name, target_room.name) >= 3:
-                        # long distance higher CPU but move fast
+                    elif Game.map.getRoomLinearDistance(room.name, target_room.name) >= 2:
+                        # long distance higher cost but move fast
                         miner_spec = [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE]
+                        upgrader_spec = [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE]
                     else:
-                        # short distance low CPU but move slow
+                        # short distance low cost but move slow
                         miner_spec = [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE]
+                        upgrader_spec = [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE]
 
                     if room.energyAvailable < room.energyCapacityAvailable:  # only help other room if our room doesn't need much
                         pass
                     elif Game.creeps[claim_target + '_bminer1'] == undefined:  # or Game.creeps[claim_target + '_bminer1'].ticksToLive:
                         spawn.spawnCreep(miner_spec, claim_target + "_bminer1", {"memory": {"cls": "miner", "room": claim_target}})
-                    #elif Game.creeps[claim_target + '_bminer2'] == undefined:
-                    #    spawn.spawnCreep(miner_spec, claim_target + "_bminer2", {"memory": {"cls": "miner", "room": claim_target}})
+                    elif Game.creeps[claim_target + '_bminer2'] == undefined:
+                        spawn.spawnCreep(miner_spec, claim_target + "_bminer2", {"memory": {"cls": "miner", "room": claim_target}})
 
                     elif Game.creeps[claim_target + '_bbuilder1'] == undefined:
                         spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], claim_target + "_bbuilder1", {"memory": {"cls": "builder", "room": claim_target}})
@@ -99,15 +107,15 @@ class RoomManagerRCL2(AbstractRoomManager):
                     #    spawn.spawnCreep([WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], claim_target + "_bhauler4", {"memory": {"cls": "hauler", "room": claim_target}})
 
                     elif Game.creeps[claim_target + '_bupgrader1'] == undefined:
-                        spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE], claim_target + "_bupgrader1", {"memory": {"cls": "upgrader", "room": claim_target}})
+                        spawn.spawnCreep(upgrader_spec, claim_target + "_bupgrader1", {"memory": {"cls": "upgrader", "room": claim_target}})
                     elif Game.creeps[claim_target + '_bupgrader2'] == undefined:
-                        spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE], claim_target + "_bupgrader2", {"memory": {"cls": "upgrader", "room": claim_target}})
-                    #elif Game.creeps[claim_target + '_bupgrader3'] == undefined:
-                    #    spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE], claim_target + "_bupgrader3", {"memory": {"cls": "upgrader", "room": claim_target}})
-                    #elif Game.creeps[claim_target + '_bupgrader4'] == undefined:
-                    #    spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE], claim_target + "_bupgrader4", {"memory": {"cls": "upgrader", "room": claim_target}})
+                        spawn.spawnCreep(upgrader_spec, claim_target + "_bupgrader2", {"memory": {"cls": "upgrader", "room": claim_target}})
+                    elif Game.creeps[claim_target + '_bupgrader3'] == undefined:
+                        spawn.spawnCreep(upgrader_spec, claim_target + "_bupgrader3", {"memory": {"cls": "upgrader", "room": claim_target}})
+                    elif Game.creeps[claim_target + '_bupgrader4'] == undefined:
+                        spawn.spawnCreep(upgrader_spec, claim_target + "_bupgrader4", {"memory": {"cls": "upgrader", "room": claim_target}})
                     #elif Game.creeps[claim_target + '_bupgrader5'] == undefined:
-                    #    spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE], claim_target + "_bupgrader5", {"memory": {"cls": "upgrader", "room": claim_target}})
+                    #    spawn.spawnCreep(upgrader_spec, claim_target + "_bupgrader5", {"memory": {"cls": "upgrader", "room": claim_target}})
 
         # XXX XXX XXX \\ big temp section //
 
@@ -378,8 +386,8 @@ class RoomManagerRCL2(AbstractRoomManager):
             pass  # we really need an upgrader
         elif to_construct_sum > 2000:
             return  # we have stuff to build, lets not use energy for upgrades right now
-        elif claim_target:
-            return  # we are claiming another room, that needs all the energy it can get
+        elif claim_target:  #and room.energyCapacityAvailable != room.energyAvailable:
+            return  # we are claiming another room, that needs a lot of the energy
 
         #if room.controller.ticksToDowngrade > 1000:
         #    # XXX: temporarily disable spawning upgraders so that we can build new rooms
