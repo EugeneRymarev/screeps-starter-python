@@ -28,4 +28,6 @@ class Upgrader(Harvester):
     def _get_target_getters(self):
         if self.creep.room.controller.level == 8:
             return [self._get_neighboring_construction_site, self._get_best_free_church, self._get_room_controller]
+        elif self.class_exists('hauler'):
+            return [self._get_best_free_church, self._get_room_controller]
         return super()._get_target_getters()
