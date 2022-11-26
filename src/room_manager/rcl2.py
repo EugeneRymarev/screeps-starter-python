@@ -64,9 +64,9 @@ class RoomManagerRCL2(AbstractRoomManager):
                 if not target_room or not target_room.controller.my or (type_ == 'reserve' and target_room.controller.reservation and target_room.controller.reservation.ticksToEnd < 600):
                     cls = type_ + 'er'
                     name = target + '_' + cls
-                    if Game.creeps[name] == undefined and room.energyCapacityAvailable > 850:
+                    if Game.creeps[name] == undefined and room.energyCapacityAvailable > 1450:
                         print('and we spawn a', cls, 'whoooo!!')
-                    spawn.spawnCreep([CLAIM, MOVE, MOVE, MOVE, MOVE, MOVE], name, {"memory": {"cls": cls, "room": claim_target}})
+                    spawn.spawnCreep([CLAIM, CLAIM, MOVE, MOVE, MOVE, MOVE, MOVE], name, {"memory": {"cls": cls, "room": claim_target}})
                 if type_ == 'claim':
                     claim_target = target
 
