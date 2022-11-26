@@ -95,8 +95,8 @@ class RoomManagerRCL2(AbstractRoomManager):
 
                     elif Game.creeps[claim_target + '_bbuilder1'] == undefined:
                         spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], claim_target + "_bbuilder1", {"memory": {"cls": "builder", "room": claim_target}})
-                    elif Game.creeps[claim_target + '_bbuilder2'] == undefined:
-                        spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], claim_target + "_bbuilder2", {"memory": {"cls": "builder", "room": claim_target}})
+                    #elif Game.creeps[claim_target + '_bbuilder2'] == undefined:
+                    #    spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], claim_target + "_bbuilder2", {"memory": {"cls": "builder", "room": claim_target}})
 
                     elif Game.creeps[claim_target + '_bhauler1'] == undefined:
                         spawn.spawnCreep([WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], claim_target + "_bhauler1", {"memory": {"cls": "hauler", "room": claim_target}})
@@ -113,8 +113,8 @@ class RoomManagerRCL2(AbstractRoomManager):
                         spawn.spawnCreep(upgrader_spec, claim_target + "_bupgrader2", {"memory": {"cls": "upgrader", "room": claim_target}})
                     elif Game.creeps[claim_target + '_bupgrader3'] == undefined:
                         spawn.spawnCreep(upgrader_spec, claim_target + "_bupgrader3", {"memory": {"cls": "upgrader", "room": claim_target}})
-                    elif Game.creeps[claim_target + '_bupgrader4'] == undefined:
-                        spawn.spawnCreep(upgrader_spec, claim_target + "_bupgrader4", {"memory": {"cls": "upgrader", "room": claim_target}})
+                    #elif Game.creeps[claim_target + '_bupgrader4'] == undefined:
+                    #    spawn.spawnCreep(upgrader_spec, claim_target + "_bupgrader4", {"memory": {"cls": "upgrader", "room": claim_target}})
                     #elif Game.creeps[claim_target + '_bupgrader5'] == undefined:
                     #    spawn.spawnCreep(upgrader_spec, claim_target + "_bupgrader5", {"memory": {"cls": "upgrader", "room": claim_target}})
 
