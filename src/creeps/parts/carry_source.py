@@ -216,7 +216,7 @@ class CarrySource:
         for s in creep.room.find(FIND_STRUCTURES):
             if s.structureType != STRUCTURE_CONTAINER:
                 continue
-            if s.store[RESOURCE_ENERGY] <= 0:
+            if s.store[RESOURCE_ENERGY] <= min(800, creep.store.getFreeCapacity(RESOURCE_ENERGY)):
                 continue
             nearby_sources = s.pos.findInRange(FIND_SOURCES, 1)
             if len(nearby_sources) == 0:
